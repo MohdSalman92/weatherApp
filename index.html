@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weatherApp</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+      </style>
+</head>
+<body>
+    <main>
+        <div class="weather">
+          <div id="search" class="search">
+          <input type="text" placeholder="Enter City Name"/>
+            <button><i class="fa-solid fa-magnifying-glass"></i></button>
+          </div>
+          <div class="temp-info">
+            <spna id="icon"><img id="wicon" src="" alt="weather icon" style="width: 100px; height: 100px;"></spna>
+            <span id="temp">25°C</span>
+            <span id="city">Delhi</span>
+            <span id="weather-type"></span>
+          </div>
+  
+          <div class="info">
+            <span id="wind"><i class="fa-solid fa-wind"></i>20km/h</span>
+            <span id="humidity"><i class="fa-solid fa-temperature-low"></i>60%</span>
+          </div>
+        </div>
+      </main>
+      <script>
+        const apiKey = "2ff17852b6296aec0e262feb02a6b266";
+        const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";      
+        const searchBox = document.querySelector(".search input");
+        const searchBtn = document.querySelector(".search button");
+        
+  
+        async function checkWeather(city){
+          const response = await fetch(apiUrl +city + `&appid=${apiKey}`);
+          var data = await response.json();
+        document.getElementById("temp").innerHTML = Math.round(data.main.temp)+"°C";
+        document.getElementById("city").innerHTML = data.name;
+          //....fetching icons from API..................
+        let iconCode = data.weather[0].icon;
+        let iconUrl = "https://openweathermap.org/img/w/"+iconCode+".png";
+        document.getElementById("wicon").setAttribute("src", iconUrl);
+  
+        document.getElementById("wind").innerHTML = data.wind.speed + "km/h";
+        document.getElementById("humidity").innerHTML = data.main.humidity + "%";
+        document.getElementById("weather-type").innerHTML = data.weather[0].description;
+  
+          console.log(data);
+  
+        }
+        searchBtn.addEventListener("click",()=>{
+          checkWeather(searchBox.value);
+  
+        })
+      </script>
+  </body>
+</html>
